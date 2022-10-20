@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getPosts } from '../utils/mdx-utils';
+import fetch from 'node-fetch';
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -65,3 +66,22 @@ export function getStaticProps() {
 
   return { props: { posts, globalData } };
 }
+
+await fetch(`${process.env.URL}/.netlify/functions/emails/yo`, {
+  headers: {
+    'netlify-emails-secret': process.env.NETLIFY_EMAILS_SECRET,
+  },
+  method: 'POST',
+  body: JSON.stringify({
+    from: 'no-reply@yourdomain.com',
+    to: 'alexanderhamilton@test.com',
+    cc: 'cc@test.com',
+    bcc: 'bcc@test.com',
+    subject: 'YO!',
+    parameters: {
+      image:
+        'https://spy.com/wp-content/uploads/2021/10/dog-costumes.jpg?w=1000&h=750&crop=1',
+      name: 'Alexander',
+    },
+  }),
+});
